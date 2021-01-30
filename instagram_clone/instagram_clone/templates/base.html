@@ -17,7 +17,11 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="https://bulma.io">
-          <img src="{% static 'img/instagram-logo.png' %}" width="64" height="64" />
+          <img
+            src="{% static 'img/instagram-logo.png' %}"
+            width="64"
+            height="64"
+          />
         </a>
 
         <a
@@ -77,13 +81,7 @@
 
     <section class="section">
       <div class="container">
-        
-        {% block content  %}
-        {% endblock  %}
-
-        {% block pagination  %}
-        {% endblock  %}
-
+        {% block content %} {% endblock %} {% block pagination %} {% endblock %}
       </div>
     </section>
   </body>
