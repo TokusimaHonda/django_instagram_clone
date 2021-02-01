@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template import loader
 from django.http import HttpResponse
 
@@ -25,6 +25,19 @@ def index(request):
 
     context = {
         'post_items': post_items,
+    }
+
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def PostDetails(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    template = loader.get_template('post_detail.html')
+
+    context = {
+        'post': post,
     }
 
     return HttpResponse(template.render(context, request))
