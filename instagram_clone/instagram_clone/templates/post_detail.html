@@ -27,7 +27,7 @@
           {{post.caption}}
           <p>
             {% for tag in post.tags.all %}
-            <a href="{{post.get_absolute_url}}">#{{tag}}</a>
+            <a href="{{tag.get_absolute_url}}">#{{tag}}</a>
             {% endfor %}
           </p>
           <br />
