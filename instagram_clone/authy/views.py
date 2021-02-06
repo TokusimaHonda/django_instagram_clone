@@ -67,7 +67,7 @@ def Signup(request):
             password = form.cleaned_data.get('password')
             User.objects.create_user(
                 username=username, email=email, password=password)
-            return redirect('index')
+            return redirect('edit-profile')
     else:
         form = SignupForm()
 

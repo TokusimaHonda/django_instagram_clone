@@ -6,9 +6,14 @@ from django.urls import reverse
 
 from django.contrib.auth.decorators import login_required
 # Create your views here.
+
+# Models
 from post.models import Post, Stream, Tag, Likes
 from authy.models import Profile
+from comment.models import Comment
+# Forms
 from post.forms import NewPostForm
+from comment.forms import CommentForm
 
 
 @login_required
@@ -36,8 +41,23 @@ def index(request):
 @login_required
 def PostDetails(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    profile = Profile.objects.get(user=request.user)
+    user = request.user
     favorited = False
+
+    # コメント
+    comments = Comment.objects.filter(post=post).order_by('date')
+
+    # コメントフォーム
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.user = user
+            comment.save()
+            return HttpResponseRedirect(reverse('postdetails', args=[post_id]))
+    else:
+        form = CommentForm()
 
     if request.user.is_authenticated:
         profile = Profile.objects.get(user=request.user)
@@ -51,6 +71,8 @@ def PostDetails(request, post_id):
     context = {
         'post': post,
         'favorited': favorited,
+        'form': form,
+        'comments': comments,
     }
 
     return HttpResponse(template.render(context, request))
