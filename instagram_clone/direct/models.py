@@ -13,10 +13,10 @@ class Message(models.Model):
     recipient = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='to_user')
     body = models.TextField(max_length=1000, blank=True, null=True)
-    date = models.DateField(auto_now_add=True)
-    is_read = models.BooleanField(default=True)
+    date = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
 
-    def senf_message(from_user, to_user, body):
+    def send_message(from_user, to_user, body):
         sender_message = Message(
             user=from_user,
             sender=from_user,
@@ -39,8 +39,8 @@ class Message(models.Model):
     def get_messages(user):
         users = []
         messages = Message.objects.filter(user=user).values(
-            'recipient').annotate(Last=Max('date')).order_by('-last')
-        for messages in message:
+            'recipient').annotate(last=Max('date')).order_by('-last')
+        for message in messages:
             users.append({
                 'user': User.objects.get(pk=message['recipient']),
                 'last': message['last'],
